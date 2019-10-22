@@ -1,0 +1,114 @@
+<resources>
+    <string name="app_name">圆游推流器</string>
+    <string name="network">网络</string>
+    <string name="history">历史</string>
+    <string name="setting">设置</string>
+    <string name="H265">H.265</string>
+    <string name="H246">H.264</string>
+    <string name="scanbar">Scan Barcode</string>
+    <string name="cancel">Cancel</string>
+    <string name="ScaleVideo">ScaleVideo</string>
+    <string name="reload">reload</string>
+    <string name="rotate">rotate</string>
+    <string name="Screenshot">Screenshot</string>
+    <string name="Mute">Mute</string>
+    <string name="time0">00:00/00:00</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="net_search">查找视频信息</string>
+
+    <string name="set_setting">设置</string>
+
+    <string name="popup_choice">请选择编码格式</string>
+
+    <string name="net_scan">扫一扫</string>
+
+    <string name="set_st">播放格式:</string>
+    <string name="set_surface">SurfaceView</string>
+    <string name="set_texture">TextureView</string>
+    <string name="set_hwc">解码格式:</string>
+    <string name="set_hard">硬解</string>
+    <string name="set_soft">软解</string>
+    <string name="start_vedio">播放</string>
+
+    <string name="debugoff">Debug关</string>
+    <string name="debugon">Debug开</string>
+    <string name="debugchange">Debubg开关</string>
+    <string name="vrchange">VR开关</string>
+    <string name="time_picker_live_start_time">直播开始时间</string>
+    <string name="time_picker_live_end_time">直播结束时间</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string-array name="list_preference_entries">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
+
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="multi_select_list_preference_default_value" />
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+</resources>

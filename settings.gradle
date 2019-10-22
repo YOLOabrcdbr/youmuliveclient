@@ -1,0 +1,3 @@
+include ':app', ':rtmppublisher', ':zxing-simplify', ':zxinglib', ':libWSLive'
+project(':rtmppublisher').projectDir = new File('app/rtmppublisher')
+project(':libWSLive').projectDir = new File('WSLiveDemo-master/libWSLive')
