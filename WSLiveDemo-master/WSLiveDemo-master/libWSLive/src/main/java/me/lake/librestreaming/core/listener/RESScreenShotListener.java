@@ -3,7 +3,7 @@ package me.lake.librestreaming.core.listener;
 import android.graphics.Bitmap;
 
 
-public interface RESScreenShotListener {
+public interface    RESScreenShotListener {
     void onScreenShotResult(Bitmap bitmap);
 
     class RESScreenShotListenerRunable implements Runnable {

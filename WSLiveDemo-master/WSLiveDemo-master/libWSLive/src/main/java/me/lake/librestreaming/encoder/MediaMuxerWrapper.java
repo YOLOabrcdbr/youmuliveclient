@@ -19,8 +19,8 @@ public class MediaMuxerWrapper {
 	private static final boolean DEBUG = false;	// TODO set false on release
 	private static final String TAG = "MediaMuxerWrapper";
 
-	private static final String DIR_NAME = "WSLive";
-    private static final SimpleDateFormat mDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.US);
+	private static final String DIR_NAME = "Youmu";
+    private static final SimpleDateFormat mDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
 
 	private String mOutputPath;
 	private final MediaMuxer mMediaMuxer;	// API >= 18
@@ -36,7 +36,7 @@ public class MediaMuxerWrapper {
 	public MediaMuxerWrapper(String ext) throws IOException {
 		if (TextUtils.isEmpty(ext)) ext = ".mp4";
 		try {
-			mOutputPath = getCaptureFile(Environment.DIRECTORY_MOVIES, ext).toString();
+			mOutputPath = getCaptureFile(Environment.DIRECTORY_DCIM, ext).toString();
 			//mOutputPath =newTmpDir("Movies");/* getCaptureFile(Environment.DIRECTORY_MOVIES, ext).toString();*/
 		} catch (final NullPointerException e) {
 			throw new RuntimeException("This app has no permission of writing external storage");
@@ -210,6 +210,9 @@ public class MediaMuxerWrapper {
 		final File dir = new File(Environment.getExternalStoragePublicDirectory(type), DIR_NAME);
 		Log.d(TAG, "path=" + dir.toString());
 		dir.mkdirs();
+		if (!dir.exists()){
+			dir.mkdirs();
+		}
         if (dir.canWrite()) {
         	return new File(dir, getDateTimeString() + ext);
         }

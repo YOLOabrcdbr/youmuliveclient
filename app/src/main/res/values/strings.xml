@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">圆游推流器</string>
+    <string name="app_name">游目推流器</string>
     <string name="network">网络</string>
     <string name="history">历史</string>
     <string name="setting">设置</string>

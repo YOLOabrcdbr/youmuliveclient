@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.teachk.publisher"
+        applicationId "com.teachk.publisherYoumu"
         minSdkVersion 24
         targetSdkVersion 28
         versionCode 1
@@ -37,10 +37,12 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.0.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation project(':OpenCV')
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
     //implementation project(':zxing-simplify')
     implementation project(':zxinglib')
-    implementation 'com.github.WangShuo1143368701:WSLiveDemo:v1.7'
+    implementation project(':libWSLive')
+    //implementation 'com.github.WangShuo1143368701:WSLiveDemo:v1.7'
     implementation 'com.github.NodeMedia:NodeMediaClient-Android:2.4.5'
     //implementation 'com.github.open-android:Zxing:v1.0.3'
     implementation 'com.android.support:recyclerview-v7:28.0.0'

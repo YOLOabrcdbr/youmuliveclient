@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.teachk.publisher">
+    package="com.teachk.publisherYoumu">
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -29,23 +29,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.FullScreen">
-        <activity android:name=".LoginActivity">
+        <activity android:name="com.teachk.publisherYoumu.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegActivity" />
+        <activity android:name="com.teachk.publisherYoumu.RegActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.teachk.publisherYoumu.MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".SettingActivity" />
+        <activity android:name="com.teachk.publisherYoumu.SettingActivity" />
         <activity
-            android:name=".MainLandScapeActivity"
+            android:name="com.teachk.publisherYoumu.MainLandScapeActivity"
             android:screenOrientation="landscape" />
-        <activity android:name=".LivelistActivity" />
-        <activity android:name=".Practise"></activity>
+        <activity android:name="com.teachk.publisherYoumu.LivelistActivity" />
+        <activity android:name="com.teachk.publisherYoumu.Practise"></activity>
     </application>
 
 </manifest>

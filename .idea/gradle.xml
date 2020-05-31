@@ -8,7 +8,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/WSLiveDemo-master/libWSLive" />
+            <option value="$PROJECT_DIR$/OpenCV" />
+            <option value="$PROJECT_DIR$/WSLiveDemo-master/WSLiveDemo-master/libWSLive" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/app/rtmppublisher" />
             <option value="$PROJECT_DIR$/zxing-simplify" />

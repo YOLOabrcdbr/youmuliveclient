@@ -1,14 +1,20 @@
 package me.lake.librestreaming.ws;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.TextureView;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -177,6 +183,7 @@ public class StreamLiveCameraView extends FrameLayout {
             mMuxer.stopRecording();
             mMuxer = null;
             System.gc();
+
             return path;
         }
         System.gc();
