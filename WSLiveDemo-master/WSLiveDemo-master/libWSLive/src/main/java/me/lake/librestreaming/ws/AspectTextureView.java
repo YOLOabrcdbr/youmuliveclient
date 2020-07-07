@@ -1,9 +1,12 @@
 package me.lake.librestreaming.ws;
 
 import android.content.Context;
+import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.TextureView;
 import android.view.View;
+
+import jp.co.cyberagent.android.gpuimage.GLTextureView;
 
 
 public class AspectTextureView extends TextureView {
@@ -21,9 +24,9 @@ public class AspectTextureView extends TextureView {
         super(context, attrs);
     }
 
-    public AspectTextureView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
+//    public AspectTextureView(Context context, AttributeSet attrs, int defStyleAttr) {
+//        super(context, attrs, defStyleAttr);
+//    }
 
     /**
      * @param mode        {@link #MODE_FITXY},{@link #MODE_INSIDE},{@link #MODE_OUTSIDE}
@@ -88,4 +91,5 @@ public class AspectTextureView extends TextureView {
         }
         super.layout(l, t, r, b);
     }
+
 }

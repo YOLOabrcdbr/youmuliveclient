@@ -11,7 +11,7 @@ import me.lake.librestreaming.rtmp.RESRtmpSender;
 import me.lake.librestreaming.tools.LogTools;
 
 
-public class VideoSenderThread extends Thread {
+public class  VideoSenderThread extends Thread {
     private static final long WAIT_TIME = 5000;
     private MediaCodec.BufferInfo eInfo;
     private long startTime = 0;

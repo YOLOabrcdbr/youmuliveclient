@@ -47,7 +47,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editText7"
         app:layout_constraintVertical_bias="1.0">
 
-    </android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout >
 
     <Button
         android:id="@+id/button"
@@ -108,6 +108,20 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/editText6"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button_test"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="112dp"
+        android:background="@drawable/button_bg_selector"
+        android:text="Test"
+        android:textColor="@color/bg_white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/editText6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView

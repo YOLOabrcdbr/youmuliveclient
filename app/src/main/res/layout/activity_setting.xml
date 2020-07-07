@@ -81,7 +81,7 @@
     <EditText
         android:id="@+id/editText"
         style="@style/Widget.AppCompat.EditText"
-        android:layout_width="0dp"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="14dp"
         android:layout_marginTop="7dp"
@@ -97,7 +97,7 @@
     <EditText
         android:id="@+id/editText2"
         style="@style/Widget.AppCompat.EditText"
-        android:layout_width="0dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="14dp"
         android:layout_marginTop="7dp"

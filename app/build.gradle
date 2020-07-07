@@ -1,16 +1,58 @@
 apply plugin: 'com.android.application'
 
 android {
+
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    configurations.all {
+
+        resolutionStrategy.force 'com.android.support:support-annotations:27.1.1'
+    }
+    configurations {
+        compile.exclude group: 'androidx.annotation', module: 'annotation'
+
+    }
     compileSdkVersion 28
+
     defaultConfig {
+        externalNativeBuild {
+            cmake {
+                arguments "-DANDROID_STL=c++_shared"
+                targets "opencv_jni_shared"
+            }
+        }
+        multiDexEnabled true
         applicationId "com.teachk.publisherYoumu"
-        minSdkVersion 24
+        minSdkVersion 26
         targetSdkVersion 28
         versionCode 1
+
+        renderscriptTargetApi 24
+        renderscriptSupportModeEnabled true
         versionName "1.0"
-        ndk {abiFilters "armeabi"}
+        ndk {abiFilters "armeabi-v7a"}
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        lintOptions {
+            disable "ResourceType"
+        }
+
     }
+    lintOptions {
+        abortOnError false
+    }
+    aaptOptions {
+        noCompress "tflite"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -22,10 +64,34 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+        pickFirst  'META-INF/maven/org.bytedeco.javacpp-presets/opencv/pom.properties'
+        pickFirst  'META-INF/maven/org.bytedeco.javacpp-presets/opencv/pom.xml'
+        pickFirst  'META-INF/maven/org.bytedeco.javacpp-presets/ffmpeg/pom.properties'
+        pickFirst  'META-INF/maven/org.bytedeco.javacpp-presets/ffmpeg/pom.xml'
+    }
+
+}
+
+repositories {
+    maven {
+        url 'https://google.bintray.com/tensorflow'
+    }
+}
+
+allprojects {
+    repositories {
+        // Uncomment if you want to use a local repo.
+        // mavenLocal()
+        jcenter() 
+        maven { url 'https://jitpack.io' }
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'com.android.support:support-v4:28.0.0'
@@ -37,20 +103,46 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.0.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation project(':OpenCV')
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
     //implementation project(':zxing-simplify')
     implementation project(':zxinglib')
     implementation project(':libWSLive')
+    //implementation project(':OpenCV-android-sdk')
     //implementation 'com.github.WangShuo1143368701:WSLiveDemo:v1.7'
     implementation 'com.github.NodeMedia:NodeMediaClient-Android:2.4.5'
     //implementation 'com.github.open-android:Zxing:v1.0.3'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    //分割bg
+    implementation 'androidx.annotation:annotation:1.0.2'
+
+    implementation group: 'org.tensorflow', name: 'tensorflow-lite', version: '1.15.0'
+    //implementation 'org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly'
+    implementation group: 'org.tensorflow', name: 'tensorflow-lite-gpu', version: '1.15.0'
+    //implementation 'com.quickbirdstudios:opencv:4.1.0'
+    implementation 'jp.co.cyberagent.android:gpuimage:2.0.3'
+    implementation 'org.jcodec:jcodec-android:0.1.9'
+    implementation 'com.squareup.okhttp3:okhttp:3.8.1'
+    implementation 'com.qiniu:qiniu-android-sdk:7.3.12'
+    implementation 'com.loopj.android:android-async-http:1.4.9'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
+    implementation 'org.tensorflow:tensorflow-android:+'
+    implementation project(path: ':opencvsdk')
+
 }
 
 allprojects {
     repositories {
         maven { url "https://jitpack.io" }
     }
+}
+task nativeLibsToJar(type: Jar, description: 'create a jar archive of the native libs') {
+    destinationDir file("$buildDir/native-libs")
+    baseName 'native-libs'
+    from fileTree(dir: 'libs', include: '**/*.so')
+    into 'lib/'
+}
+tasks.withType(JavaCompile) {
+    compileTask -> compileTask.dependsOn(nativeLibsToJar)
 }

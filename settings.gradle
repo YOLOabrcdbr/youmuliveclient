@@ -1,4 +1,4 @@
-include ':app', ':rtmppublisher', ':zxing-simplify', ':zxinglib', ':libWSLive'
+include ':app', ':rtmppublisher', ':zxing-simplify', ':zxinglib', ':libWSLive', ':opencvsdk'
 project(':rtmppublisher').projectDir = new File('app/rtmppublisher')
 project(':libWSLive').projectDir = new File('WSLiveDemo-master/WSLiveDemo-master/libWSLive')
-include ':OpenCV'
+project(':opencvsdk').projectDir = new File('OpenCV-android-sdk/sdk')

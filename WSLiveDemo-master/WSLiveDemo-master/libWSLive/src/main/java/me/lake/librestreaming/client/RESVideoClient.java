@@ -1,9 +1,30 @@
 package me.lake.librestreaming.client;
 
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ImageFormat;
+import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
+import android.graphics.YuvImage;
 import android.hardware.Camera;
+import android.os.Environment;
+import android.util.Log;
+import android.view.SurfaceView;
 
+import org.opencv.android.Utils;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.nio.ByteBuffer;
 import java.util.List;
 
 import me.lake.librestreaming.core.CameraHelper;
@@ -19,8 +40,11 @@ import me.lake.librestreaming.model.RESConfig;
 import me.lake.librestreaming.model.RESCoreParameters;
 import me.lake.librestreaming.model.Size;
 import me.lake.librestreaming.rtmp.RESFlvDataCollecter;
+import me.lake.librestreaming.tf.ImageSegmentor;
+import me.lake.librestreaming.tf.ImageSegmentorFloatMobileUnet;
 import me.lake.librestreaming.tools.BuffSizeCalculator;
 import me.lake.librestreaming.tools.LogTools;
+import me.lake.librestreaming.ws.ImageRender;
 
 
 public class RESVideoClient {
@@ -33,13 +57,31 @@ public class RESVideoClient {
     private RESVideoCore videoCore;
     private boolean isStreaming;
     private boolean isPreviewing;
+    private WeakReference<Activity> mActivity;
 
+
+    private ImageSegmentor segmentor;
+    Bitmap bgd = null;
+
+    private boolean istrans = false;
+
+    public RESVideoClient(RESCoreParameters parameters,WeakReference<Activity> activity) {
+        resCoreParameters = parameters;
+        cameraNum = Camera.getNumberOfCameras();
+        currentCameraIndex = Camera.CameraInfo.CAMERA_FACING_BACK;
+        isStreaming = false;
+        isPreviewing = false;
+
+            this.mActivity = activity;
+
+    }
     public RESVideoClient(RESCoreParameters parameters) {
         resCoreParameters = parameters;
         cameraNum = Camera.getNumberOfCameras();
         currentCameraIndex = Camera.CameraInfo.CAMERA_FACING_BACK;
         isStreaming = false;
         isPreviewing = false;
+
     }
 
     public boolean prepare(RESConfig resConfig) {
@@ -109,46 +151,80 @@ public class RESVideoClient {
         return true;
     }
 
-    private boolean startVideo() {
-        camTexture = new SurfaceTexture(RESVideoCore.OVERWATCH_TEXTURE_ID);
-        if (resCoreParameters.filterMode == RESCoreParameters.FILTER_MODE_SOFT) {
-            camera.setPreviewCallbackWithBuffer(new Camera.PreviewCallback() {
-                @Override
-                public void onPreviewFrame(byte[] data, Camera camera) {
-                    synchronized (syncOp) {
-                        if (videoCore != null && data != null) {
-                            ((RESSoftVideoCore) videoCore).queueVideo(data);
-                        }
-                        camera.addCallbackBuffer(data);
-                    }
-                }
-            });
-        } else {
-            camTexture.setOnFrameAvailableListener(new SurfaceTexture.OnFrameAvailableListener() {
-                @Override
-                public void onFrameAvailable(SurfaceTexture surfaceTexture) {
-                    synchronized (syncOp) {
-                        if (videoCore != null) {
-                            ((RESHardVideoCore) videoCore).onFrameAvailable();
-                        }
-                    }
-                }
-            });
-        }
-        try {
-            camera.setPreviewTexture(camTexture);
-        } catch (IOException e) {
-            LogTools.trace(e);
-            camera.release();
-            return false;
-        }
-        camera.startPreview();
-        return true;
-    }
+//    private boolean startVideo() {
+//        camTexture = new SurfaceTexture(RESVideoCore.OVERWATCH_TEXTURE_ID);
+//        if (resCoreParameters.filterMode == RESCoreParameters.FILTER_MODE_SOFT) {
+//            camera.setPreviewCallbackWithBuffer(new Camera.PreviewCallback() {
+//                @Override
+//                public void onPreviewFrame(byte[] data, Camera camera) {
+//                    synchronized (syncOp) {
+//                        if (videoCore != null && data != null) {
+////                            Bitmap bgd = null;
+////                            //Bitmap  bitmap = BitmapFactory.decodeByteArray(data,0,data.length);
+////                            ImageSegmentor segmentor;
+////                            segmentor = new ImageSegmentorFloatMobileUnet(mActivity);
+////                            Bitmap fgd = BitmapFactory.decodeByteArray(data,0,data.length);
+////
+////                            bgd=Bitmap.createScaledBitmap(
+////                                    bgd,resCoreParameters.videoWidth,resCoreParameters.videoHeight, false);
+////
+////                            segmentor.segmentFrame(bitmap, mode, fgd, bgd);
+//
+//                            ((RESSoftVideoCore) videoCore).queueVideo(data);
+//                        }
+//                        camera.addCallbackBuffer(data);
+//                    }
+//                }
+//            });
+//        } else {
+//            camTexture.setOnFrameAvailableListener(new SurfaceTexture.OnFrameAvailableListener() {
+//                @Override
+//                public void onFrameAvailable(SurfaceTexture surfaceTexture) {
+//
+//                    synchronized (syncOp) {
+//
+//                        if (videoCore != null) {
+//                            ((RESHardVideoCore) videoCore).onFrameAvailable();
+//                        }
+//                    }
+//                }
+//            });
+//        }
+//        try {
+//
+//            camera.setPreviewTexture(camTexture);
+//
+//        } catch (IOException e) {
+//            LogTools.trace(e);
+//            camera.release();
+//            return false;
+//        }
+//        camera.startPreview();
+//        return true;
+//    }
 
+    public boolean startPreview(Bitmap bgd,ImageSegmentor segmentor,SurfaceTexture surfaceTexture, int visualWidth, int visualHeight) {
+        synchronized (syncOp) {
+            if (!isStreaming && !isPreviewing) {
+                this.segmentor = segmentor;
+                this.bgd = bgd;
+                istrans = true;
+                if (!startVideo()) {
+                    resCoreParameters.dump();
+                    LogTools.e("RESVideoClient,start(),failed");
+                    return false;
+                }
+                videoCore.updateCamTexture(camTexture);
+            }
+            videoCore.startPreview(surfaceTexture, visualWidth, visualHeight);
+            isPreviewing = true;
+            return true;
+        }
+    }
     public boolean startPreview(SurfaceTexture surfaceTexture, int visualWidth, int visualHeight) {
         synchronized (syncOp) {
             if (!isStreaming && !isPreviewing) {
+               istrans = false;
                 if (!startVideo()) {
                     resCoreParameters.dump();
                     LogTools.e("RESVideoClient,start(),failed");
@@ -164,6 +240,18 @@ public class RESVideoClient {
 
     public void updatePreview(int visualWidth, int visualHeight) {
         videoCore.updatePreview(visualWidth, visualHeight);
+    }
+
+    public void updatePreviewbgd(Bitmap bgd,ImageSegmentor segmentor) {
+        if(segmentor!=null)
+        { this.bgd = bgd;
+        this.segmentor = segmentor;
+        istrans = true;
+        }
+        else
+        {
+            istrans = false;
+        }
     }
 
     public boolean stopPreview(boolean releaseTexture) {
@@ -463,4 +551,135 @@ public class RESVideoClient {
     public void setNeedResetEglContext(boolean bol){
         videoCore.setNeedResetEglContext(bol);
     }
+
+    //添加
+
+
+    private int k = 0,c = 0;
+    private boolean startVideo() {
+        camTexture = new SurfaceTexture(RESVideoCore.OVERWATCH_TEXTURE_ID);
+
+        if (resCoreParameters.filterMode == RESCoreParameters.FILTER_MODE_SOFT) {
+            camera.setPreviewCallbackWithBuffer(new Camera.PreviewCallback() {
+                @Override
+                public void onPreviewFrame(byte[] data, Camera camera) {
+                    synchronized (syncOp) {
+                        if (videoCore != null && data != null) {
+                            if(istrans) {
+                                int pwidth = resCoreParameters.previewVideoWidth;
+                                int phight = resCoreParameters.previewVideoHeight;
+
+//                            byte[] kdata = ImageUtils.rotateYUV420Degree180(ImageUtils.rotateYUV420Degree90(data,pwidth, phight),pwidth, phight);
+                                YuvImage yuvimage = new YuvImage(data, ImageFormat.NV21, pwidth, (int) (phight), null);//20、20分别是图的宽度与高度
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                yuvimage.compressToJpeg(new Rect(0, 0, pwidth, phight), 50, baos);//80--JPG图片的质量[0-100],100最高
+                                byte[] jdata = baos.toByteArray();
+                                Bitmap bitmap = BitmapFactory.decodeByteArray(jdata, 0, jdata.length);
+
+//                            Mat raw = new Mat((int)(resCoreParameters.videoHeight*1.5),resCoreParameters.videoWidth,CvType.CV_8UC1);
+//                            raw.put(0,0,data);
+//                            Mat trans = new Mat();
+//                            Imgproc.cvtColor(raw,trans,Imgproc.COLOR_YUV2BGR_I420);
+//
+//
+//                            Bitmap  bitmap  = Bitmap.createBitmap(trans.cols(), trans.rows(),Bitmap.Config.ARGB_8888);
+//
+//                            Utils.matToBitmap(trans,bitmap);
+//                            if(c<15) {
+//                                saveBitmap(bitmap,Environment.getExternalStorageDirectory().getAbsolutePath()+"/Pictures/bitmap"+k+".jpg");
+//                                c++;
+//                            }
+                                int width = bitmap.getWidth();
+                                int height = bitmap.getHeight();
+                                float scaleWidth = ((float) 128) / width;
+                                float scaleHeight = ((float) 128) / height;
+                                // CREATE A MATRIX FOR THE MANIPULATION
+                                Matrix matrix = new Matrix();
+                                // RESIZE THE BIT MAP
+                                matrix.postScale(scaleWidth, scaleHeight);
+
+                                // "RECREATE" THE NEW BITMAP
+                                Bitmap resizedBitmap = Bitmap.createBitmap(
+                                        bitmap, 0, 0, width, height, matrix, false);
+
+
+//                            Bitmap fgd = bitmap;
+
+
+                                bgd = Bitmap.createScaledBitmap(
+                                        bgd, pwidth, phight, false);
+//                          bgd = ImageUtils.adjustPhotoRotation(bgd,90);
+                                segmentor.segmentFrame(resizedBitmap, 1, bitmap, bgd);
+
+//                            Mat trans2  = new Mat();
+//
+//                            Utils.bitmapToMat(segmentor.result,trans2);
+//                            Mat result = new Mat();
+//                            Imgproc.cvtColor(trans2,result,Imgproc.COLOR_YUV2BGR_I420);
+//                            byte[] data_result = new byte[resCoreParameters.videoWidth*resCoreParameters.videoHeight];
+//                            result.get(0,0,data_result);
+//                            data = data_result;
+
+                                byte[] data_result = ImageUtils.bitmapToNv21(segmentor.result, pwidth, phight);
+//                           data_result = ImageUtils.rotateYUV420Degree180(ImageUtils.rotateYUV420Degree90(data_result,pwidth, phight),pwidth, phight);
+//                            if(k<15) {
+//                                saveBitmap(segmentor.result,Environment.getExternalStorageDirectory().getAbsolutePath()+"/Pictures/ddd"+k+".jpg");
+//                                k++;
+//                            }
+                                data = data_result;
+
+                            }
+
+                            ((RESSoftVideoCore) videoCore).queueVideo(data);
+
+//                            ((RESSoftVideoCore) videoCore).queueVideo(data);
+                        }
+                            camera.addCallbackBuffer(data);
+
+
+                    }
+                }
+            });
+
+        }
+        try {
+
+            camera.setPreviewTexture(camTexture);
+
+        } catch (IOException e) {
+            LogTools.trace(e);
+            camera.release();
+            return false;
+        }
+        camera.startPreview();
+        return true;
+    }
+    public static void saveBitmap(Bitmap bitmap,String path) {
+        String savePath;
+        File filePic;
+        if (Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED)) {
+            savePath = path;
+        } else {
+            Log.e("tag", "saveBitmap failure : sdcard not mounted");
+            return;
+        }
+        try {
+            filePic = new File(savePath);
+            if (!filePic.exists()) {
+                filePic.getParentFile().mkdirs();
+                filePic.createNewFile();
+            }
+            FileOutputStream fos = new FileOutputStream(filePic);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            Log.e("tag", "saveBitmap: " + e.getMessage());
+            return;
+        }
+        Log.i("tag", "saveBitmap success: " + filePic.getAbsolutePath());
+    }
+
+
 }

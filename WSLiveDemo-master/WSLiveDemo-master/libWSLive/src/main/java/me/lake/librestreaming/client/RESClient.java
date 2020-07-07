@@ -4,6 +4,7 @@ package me.lake.librestreaming.client;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
 import android.os.Build;
 import android.widget.Toast;
@@ -23,7 +24,9 @@ import me.lake.librestreaming.model.Size;
 import me.lake.librestreaming.rtmp.RESFlvData;
 import me.lake.librestreaming.rtmp.RESFlvDataCollecter;
 import me.lake.librestreaming.rtmp.RESRtmpSender;
+import me.lake.librestreaming.tf.ImageSegmentor;
 import me.lake.librestreaming.tools.LogTools;
+import me.lake.librestreaming.ws.ImageRender;
 
 
 public class RESClient {
@@ -63,7 +66,7 @@ public class RESClient {
             coreParameters.rtmpAddr = resConfig.getRtmpAddr();
             coreParameters.printDetailMsg = resConfig.isPrintDetailMsg();
             coreParameters.senderQueueLength = 200;//150
-            videoClient = new RESVideoClient(coreParameters);
+            videoClient = new RESVideoClient(coreParameters,mActivity);
             audioClient = new RESAudioClient(coreParameters);
             if (!videoClient.prepare(resConfig)) {
                 LogTools.d("!!!!!videoClient.prepare()failed");
@@ -126,6 +129,7 @@ public class RESClient {
         }
     }
 
+
     /**
      * stop streaming
      */
@@ -159,19 +163,36 @@ public class RESClient {
      *
      * @param surfaceTexture to rendering preview
      */
+    public void startPreview(Bitmap bgd,ImageSegmentor segmentor, SurfaceTexture surfaceTexture, int visualWidth, int visualHeight) {
+        if(videoClient != null){
+            videoClient.startPreview(bgd,segmentor,surfaceTexture, visualWidth, visualHeight);
+        }
+        LogTools.d("RESClient,startPreview()");
+    }
     public void startPreview(SurfaceTexture surfaceTexture, int visualWidth, int visualHeight) {
         if(videoClient != null){
             videoClient.startPreview(surfaceTexture, visualWidth, visualHeight);
         }
         LogTools.d("RESClient,startPreview()");
     }
-
+    public void updatePreviewbgd(Bitmap bgd,ImageSegmentor segmentor) {
+        if(videoClient != null){
+            videoClient.updatePreviewbgd(bgd,segmentor);
+        }
+        LogTools.d("RESClient,updatePreview()");
+    }
     public void updatePreview(int visualWidth, int visualHeight) {
         if(videoClient != null){
             videoClient.updatePreview(visualWidth, visualHeight);
         }
         LogTools.d("RESClient,updatePreview()");
     }
+//    public void updatePreview(Bitmap bgd,ImageSegmentor segmentor,int visualWidth, int visualHeight) {
+//        if(videoClient != null){
+//            videoClient.updatePreview(bgd,segmentor,visualWidth, visualHeight);
+//        }
+//        LogTools.d("RESClient,updatePreview()");
+//    }
 
     /**
      *
@@ -457,6 +478,8 @@ public class RESClient {
     public String getVertion() {
         return Constants.VERSION;
     }
+
+
 
     /**
      * =====================PRIVATE=================

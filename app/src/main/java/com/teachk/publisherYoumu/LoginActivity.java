@@ -3,12 +3,17 @@ package com.teachk.publisherYoumu;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
-import android.support.annotation.Nullable;
+
 import android.content.pm.PackageManager;
+//import androidx.core.app.ActivityCompat;
+//import androidx.core.content.ContextCompat;
+//import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+//import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,10 +22,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+//import androidx.annotation.NonNull;
 //import com.github.shenyuanqing.zxingsimplify.zxing.Activity.CaptureActivity;
 import com.google.gson.Gson;
 import com.google.zxing.activity.CaptureActivity;
+import com.teachk.publisherYoumu.bgsegment.BgActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,12 +50,13 @@ public class LoginActivity extends AppCompatActivity {
     EditText PSWText=null;
     Button ScanButton=null;
     ImageView imageView=null;
-
+    Button testBtn =null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        testBtn = (Button)findViewById(R.id.button_test);
         LoginButton=(Button)findViewById(R.id.button);
         UserName=(EditText)findViewById(R.id.editText6);
         ChangeLoginWay=(TextView)findViewById(R.id.UserLoginButton);
@@ -74,6 +81,16 @@ public class LoginActivity extends AppCompatActivity {
             WaitingPermits=new String[WaitingPermit.size()];
             ActivityCompat.requestPermissions(this, WaitingPermit.toArray(WaitingPermits), 1);
         }
+
+        testBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(LoginActivity.this, BgActivity.class);
+
+                startActivity(intent);
+                finish();
+            }
+        });
 
         LoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,7 +187,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
             case 1:

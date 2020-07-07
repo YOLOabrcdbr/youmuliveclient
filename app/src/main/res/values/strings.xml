@@ -13,6 +13,36 @@
     <string name="Screenshot">Screenshot</string>
     <string name="Mute">Mute</string>
     <string name="time0">00:00/00:00</string>
+    <string name="camera_error">This device doesn\'t support Camera2 API.</string>
+
+
+    <string name="picture">Picture</string>
+    <string name="description_info">Info</string>
+    <string name="request_permission">This sample needs camera permission.</string>
+    <string name="toggle_turn_on">NN:On</string>
+    <string name="toggle_turn_off">NN:Off</string>
+    <string name="toggle">Use NNAPI</string>
+    <string name="tflite">tflite</string>
+    <string name="nnapi">NNAPI</string>
+    <string name="gpu">GPU</string>
+    <string name="cpu">CPU</string>
+    <string name="filterLabel">Figures</string>
+    <string name="deviceLabel">Device</string>
+    <string name="videoBokeh">Blur</string>
+    <string name="portraitSeg">Sea</string>
+    <string name="colorTrans">Sunset</string>
+    <string name="renderMerge">Palace</string>
+    <string name="glasses">Black glasses</string>
+    <string name="sticker2">Cartoon ears</string>
+    <string name="sticker3">Black beard</string>
+    <string name="sticker4">N95 Mask</string>
+    <string name="sticker5">3D Puppy</string>
+    <string name="sw">switch camera</string>
+    <string name="ori">Original</string>
+    <string name="sp">Start\nCamera</string>
+    <string name="circle">circle</string>
+    <string name="mouth">mouth</string>
+    <string name="eye">eye</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

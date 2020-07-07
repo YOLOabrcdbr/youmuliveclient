@@ -3,12 +3,12 @@ apply plugin: 'com.android.library'
 group='com.github.WangShuo1143368701'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 28
     buildToolsVersion '28.0.2'
 
     defaultConfig {
         minSdkVersion 18
-        targetSdkVersion 22
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0.0"
     }
@@ -31,9 +31,21 @@ android {
             jni.srcDirs = []
         }
     }
+    defaultConfig {
+
+        multiDexEnabled true
+    }
+
+
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
+    //implementation 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'jp.co.cyberagent.android:gpuimage:2.0.3'
+    implementation group: 'org.tensorflow', name: 'tensorflow-lite', version: '1.15.0'
+    //implementation 'org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly'
+    implementation group: 'org.tensorflow', name: 'tensorflow-lite-gpu', version: '1.15.0'
+    compile project(path: ':opencvsdk')
 }

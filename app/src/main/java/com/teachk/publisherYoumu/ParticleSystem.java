@@ -1,4 +1,4 @@
-package com.ParticleSystem;
+package com.teachk.publisherYoumu;
 
 import android.graphics.Point;
 import java.util.ArrayDeque;
@@ -8,7 +8,7 @@ public class ParticleSystem {
 
     private static int total_duration = 0;
     private static int group_size = 0;
-    private static ArrayDeque<Particle> ptcspool = new ArrayDeque<>();
+    private static ArrayDeque<com.teachk.publisherYoumu.Particle> ptcspool = new ArrayDeque<>();
 
     public static void Configuration(int[][] config,int Total_Duration_Second){
         //reconfiguration

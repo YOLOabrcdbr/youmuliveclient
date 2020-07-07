@@ -1,15 +1,18 @@
 package com.takusemba.rtmppublisher;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleObserver;
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.OnLifecycleEvent;
+
+import android.arch.lifecycle.*;
+
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.opengl.EGL14;
 import android.opengl.EGLContext;
 import android.opengl.GLSurfaceView;
 import android.support.v7.app.AppCompatActivity;
+
+
+//import androidx.appcompat.app.AppCompatActivity;
+//import androidx.lifecycle.*;
 
 public class RtmpPublisher implements Publisher, SurfaceTexture.OnFrameAvailableListener,
         CameraSurfaceRenderer.OnRendererStateChangedListener, LifecycleObserver {

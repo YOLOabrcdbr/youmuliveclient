@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+<!--    bg添加-->
+
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="0dp"
@@ -16,7 +18,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
-    <me.lake.librestreaming.ws.StreamLiveCameraView
+        <com.teachk.publisherYoumu.ImageSegmentor.AutoFitTextureView
+            android:id="@+id/texture2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <me.lake.librestreaming.ws.StreamLiveCameraView
         android:id="@+id/SurfaceView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,9 +33,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </me.lake.librestreaming.ws.StreamLiveCameraView>
-    </FrameLayout>>
 
+    </me.lake.librestreaming.ws.StreamLiveCameraView>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/cont"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"/>
     <Button
         android:id="@+id/StartButton"
         android:layout_width="123dp"
@@ -112,6 +132,171 @@
             android:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/FlashLightButton" />
+        <Button
+            android:id="@+id/BgButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/screen_shot"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ScreenShotButton" />
+        <LinearLayout
+            android:id="@+id/bottom_info_view2"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="100dp"
+            android:background="@color/transparent"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            >
+        <LinearLayout
+            android:id="@+id/modelLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <ListView
+                android:id="@+id/model2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal">
+
+            </ListView>
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/img0"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="0dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="2dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/bg_3"/>
+
+
+                <ImageButton
+                    android:layout_marginLeft="3dp"
+                    android:id="@+id/img1"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/dock_vbig"
+                    android:scaleType="centerInside"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="0dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="2dp" />
+
+                <ImageButton
+                    android:layout_marginLeft="3dp"
+                    android:id="@+id/img2"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/sunset_vbig"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="0dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="2dp"
+                    android:scaleType="centerInside"/>
+
+                <ImageButton
+                    android:layout_marginLeft="3dp"
+                    android:id="@+id/img3"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="0dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="2dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/bupt1_vbig"/>
+                // 额外添加
+                <ImageButton
+                    android:layout_marginLeft="3dp"
+                    android:id="@+id/img4"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="0dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="2dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/image1_small"/>
+                <ImageButton
+                    android:layout_marginLeft="3dp"
+                    android:id="@+id/img5"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="0dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="2dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/image2_small"/>
+                <ImageButton
+                    android:layout_marginLeft="3dp"
+                    android:id="@+id/img6"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="0dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="2dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/image3_small"/>
+                <ImageButton
+                    android:layout_marginLeft="3dp"
+                    android:id="@+id/img7"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="0dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="2dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/image4_small"/>
+                <ImageButton
+                    android:layout_marginLeft="3dp"
+                    android:id="@+id/img8"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="0dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="2dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/image5_small"/>
+
+            </LinearLayout>
+        </HorizontalScrollView>
+        </LinearLayout>
+        </LinearLayout>
     </android.support.constraint.ConstraintLayout>
+<!--    device 可能是用来切换加速方式 目前不使用-->
+<!--    <LinearLayout-->
+<!--        android:id="@+id/deviceLayout2"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:orientation="vertical">-->
+<!--        <ListView-->
+<!--            android:id="@+id/device2"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent" />-->
+
+<!--    </LinearLayout>-->
 
 </android.support.constraint.ConstraintLayout>

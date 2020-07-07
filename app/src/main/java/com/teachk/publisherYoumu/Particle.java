@@ -1,4 +1,4 @@
-package com.ParticleSystem;
+package com.teachk.publisherYoumu;
 
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;

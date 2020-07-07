@@ -8,7 +8,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/OpenCV" />
+            <option value="$PROJECT_DIR$/OpenCV-android-sdk/sdk" />
             <option value="$PROJECT_DIR$/WSLiveDemo-master/WSLiveDemo-master/libWSLive" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/app/rtmppublisher" />
@@ -17,6 +17,7 @@
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
+        <option name="testRunner" value="PLATFORM" />
       </GradleProjectSettings>
     </option>
   </component>

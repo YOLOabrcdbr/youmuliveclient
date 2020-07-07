@@ -2,7 +2,7 @@ package me.lake.librestreaming.ws.filter.hardfilter;
 
 import android.opengl.GLES20;
 
-import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
+import jp.co.cyberagent.android.gpuimage.filter.GPUImageFilter;
 
 /**
  * @author WangShuo

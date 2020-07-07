@@ -6,10 +6,12 @@ import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.net.Uri;
+import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.TextureView;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -19,6 +21,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.co.cyberagent.android.gpuimage.GLTextureView;
+import jp.co.cyberagent.android.gpuimage.GPUImage;
+import jp.co.cyberagent.android.gpuimage.GPUImageView;
+import me.lake.librestreaming.client.ImageUtils;
 import me.lake.librestreaming.client.RESClient;
 import me.lake.librestreaming.core.listener.RESConnectionListener;
 import me.lake.librestreaming.core.listener.RESScreenShotListener;
@@ -30,6 +36,7 @@ import me.lake.librestreaming.encoder.MediaVideoEncoder;
 import me.lake.librestreaming.filter.hardvideofilter.BaseHardVideoFilter;
 import me.lake.librestreaming.model.RESConfig;
 import me.lake.librestreaming.model.Size;
+import me.lake.librestreaming.tf.ImageSegmentor;
 import me.lake.librestreaming.tools.CameraUtil;
 import me.lake.librestreaming.ws.filter.audiofilter.SetVolumeAudioFilter;
 
@@ -37,7 +44,7 @@ import me.lake.librestreaming.ws.filter.audiofilter.SetVolumeAudioFilter;
  * Created by WangShuo on 2017/6/11.
  */
 
-public class StreamLiveCameraView extends FrameLayout {
+public class StreamLiveCameraView extends FrameLayout{
 
     private static final String TAG = "StreamLiveCameraView";
 
@@ -49,6 +56,12 @@ public class StreamLiveCameraView extends FrameLayout {
     private static RESConfig resConfig;
     private static int quality_value_min = 400 * 1024;
     private static int quality_value_max = 700 * 1024;
+
+    private ImageRender renderer ;
+
+    private ImageSegmentor segmentor;
+    private  Bitmap bgd;
+
 
     public StreamLiveCameraView(Context context) {
         super(context);
@@ -72,6 +85,7 @@ public class StreamLiveCameraView extends FrameLayout {
      * @param avOption
      */
     public void init(Context context , StreamAVOption avOption) {
+
         if (avOption == null) {
             throw new IllegalArgumentException("AVOption is null.");
         }
@@ -84,8 +98,32 @@ public class StreamLiveCameraView extends FrameLayout {
             Log.w(TAG, "推流prepare方法返回false, 状态异常.");
             return;
         }
+//        renderer = new ImageRender();
         initPreviewTextureView();
         addListenerAndFilter();
+
+    }
+
+    public void init(Bitmap bgd,ImageSegmentor segmentor,Context context , StreamAVOption avOption) {
+
+        if (avOption == null) {
+            throw new IllegalArgumentException("AVOption is null.");
+        }
+        compatibleSize(avOption);
+        resClient = getRESClient();
+        setContext(mContext);
+        resConfig = StreamConfig.build(context,avOption);
+        boolean isSucceed = resClient.prepare(resConfig);
+        if (!isSucceed) {
+            Log.w(TAG, "推流prepare方法返回false, 状态异常.");
+            return;
+        }
+
+        initPreviewTextureView();
+        this.segmentor = segmentor;
+        addListenerAndFilter();
+        this.bgd = bgd;
+
     }
 
     private void compatibleSize(StreamAVOption avOptions) {
@@ -102,16 +140,25 @@ public class StreamLiveCameraView extends FrameLayout {
     }
 
     private void initPreviewTextureView() {
-        if (textureView == null && resClient != null) {
+        if (textureView == null && resClient != null ) {
             textureView = new AspectTextureView(getContext());
             LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
             params.gravity = Gravity.CENTER;
             this.removeAllViews();
             this.addView(textureView);
             textureView.setKeepScreenOn(true);
+            //change
             textureView.setSurfaceTextureListener(surfaceTextureListenerImpl);
-            Size s = resClient.getVideoSize();
+            me.lake.librestreaming.model.Size s = resClient.getVideoSize();
             textureView.setAspectRatio(AspectTextureView.MODE_OUTSIDE, ((double) s.getWidth() / s.getHeight()));
+
+//            if(renderer == null)
+//                Log.d("ImageRender","render is null");
+//            else
+//                Log.d("ImageRender","render is init");
+//            textureView.setRenderer(renderer);
+//            textureView.setRenderMode(GLTextureView.RENDERMODE_WHEN_DIRTY);
+//            textureView.requestRender();
         }
     }
 
@@ -296,6 +343,9 @@ public class StreamLiveCameraView extends FrameLayout {
         }
     }
 
+
+
+
     /**
      * destroy
      */
@@ -364,7 +414,12 @@ public class StreamLiveCameraView extends FrameLayout {
     TextureView.SurfaceTextureListener surfaceTextureListenerImpl  = new TextureView.SurfaceTextureListener() {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-            if (resClient != null) {
+
+            if (resClient != null && bgd != null) {
+
+                resClient.startPreview(bgd,segmentor,surface, width, height);
+            }
+           else if (resClient != null) {
                 resClient.startPreview(surface, width, height);
             }
         }
@@ -386,7 +441,11 @@ public class StreamLiveCameraView extends FrameLayout {
 
         @Override
         public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-
+            if (resClient != null&&bgd!=null) {
+            resClient.updatePreviewbgd(bgd,segmentor);
+            }
+            else
+                resClient.updatePreviewbgd(null,null);
         }
     };
 
@@ -406,4 +465,18 @@ public class StreamLiveCameraView extends FrameLayout {
                 resClient.setVideoEncoder(null);
         }
     };
+
+
+public AspectTextureView getTexture(){
+    return textureView;
+}
+
+
+
+    public void setBgd(Bitmap bgd) {
+    this.bgd = bgd;
+    }
+    public void setSegmentor(ImageSegmentor seg) {
+        this.segmentor = seg;
+    }
 }

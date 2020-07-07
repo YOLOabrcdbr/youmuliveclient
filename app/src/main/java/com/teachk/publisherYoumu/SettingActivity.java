@@ -1,8 +1,9 @@
 package com.teachk.publisherYoumu;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+//import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -33,12 +34,12 @@ public class SettingActivity extends AppCompatActivity {
 
         Intent StartMode=getIntent();
         URL.setText("rtmp://39.106.194.43:1935/live360/trystream");
-        if (StartMode.getStringExtra("mode").equals("2")){
+        //if (StartMode.getStringExtra("mode").equals("2")){
             URL.setText(StartMode.getStringExtra("URL"));
-            URL.setEnabled(false);
+            //URL.setEnabled(false);
             Title.setText(StartMode.getStringExtra("name"));
-            Title.setEnabled(false);
-        }
+            //Title.setEnabled(false);
+        //}
 
         StartButton.setOnClickListener(new View.OnClickListener() {
             @Override

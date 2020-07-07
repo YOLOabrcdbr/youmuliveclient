@@ -25,6 +25,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+
+
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -69,6 +71,10 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.util.Hashtable;
+
+//import androidx.annotation.NonNull;
+//import androidx.core.app.ActivityCompat;
+//import androidx.core.content.ContextCompat;
 
 public class CaptureActivity extends Activity implements SurfaceHolder.Callback {
     private Context context;

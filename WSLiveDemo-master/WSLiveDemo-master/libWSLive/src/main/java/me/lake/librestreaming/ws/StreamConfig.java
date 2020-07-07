@@ -20,7 +20,7 @@ public class StreamConfig {
 
         public static final int DEFAULT_CAMERA_INDEX = Camera.CameraInfo.CAMERA_FACING_FRONT;
 
-        public static final int DEFAULT_FILTER_MODE = RESConfig.FilterMode.HARD;
+        public static final int DEFAULT_FILTER_MODE = RESConfig.FilterMode.SOFT;
 
         public static final int DEFAULT_RENDER_MODE = RESConfig.RenderingMode.OpenGLES;
 
