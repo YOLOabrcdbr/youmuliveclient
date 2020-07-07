@@ -48,4 +48,5 @@ dependencies {
     //implementation 'org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly'
     implementation group: 'org.tensorflow', name: 'tensorflow-lite-gpu', version: '1.15.0'
     compile project(path: ':opencvsdk')
+    compile project(path: ':particlesystempublisher')
 }

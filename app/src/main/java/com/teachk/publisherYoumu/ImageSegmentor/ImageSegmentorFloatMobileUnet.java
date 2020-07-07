@@ -22,7 +22,7 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import com.teachk.publisherYoumu.MainLandScapeActivity;
-import com.teachk.publisherYoumu.bgsegment.BgsegmentTest;
+
 
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
@@ -152,7 +152,7 @@ public class ImageSegmentorFloatMobileUnet extends ImageSegmentor {
 
       mskmat.put(0,0,segmap[0]);
 
-      Imgproc.threshold(mskmat,mskmat,BgsegmentTest.mskthresh/100.0,1.0, Imgproc.THRESH_TOZERO);
+//      Imgproc.threshold(mskmat,mskmat,BgsegmentTest.mskthresh/100.0,1.0, Imgproc.THRESH_TOZERO);
 
       Imgproc.GaussianBlur(mskmat,mskmat,new Size(7,7),0);
       Core.pow(mskmat,2.0,mskmat);
@@ -373,62 +373,62 @@ public class ImageSegmentorFloatMobileUnet extends ImageSegmentor {
 
       Mat blobmsk = Dnn.blobFromImage(mskmat, 1, new Size(512, 512));
 
-      BgsegmentTest.net.setInput(blobimg,"data");
-      BgsegmentTest.net.setInput(blobmsk,"mask");
+//      BgsegmentTest.net.setInput(blobimg,"data");
+//      BgsegmentTest.net.setInput(blobmsk,"mask");
 
       // Perform inference on inputs
-      long startTimeb = SystemClock.uptimeMillis();
-      Mat result=BgsegmentTest.net.forward();
-      long endTimeb = SystemClock.uptimeMillis();
-
-      Log.d("color harmonize", Long.toString(endTimeb - startTimeb));
-
-      // Extract rgb image from output blob
-      int H = result.size(2);
-      int W = result.size(3);
-
-      // Reshape it to a long vertical strip:
-      Mat strip = result.reshape(1, H * 3);
-
-      // Collect the color planes into a channels list:
-      List<Mat> channels = new ArrayList<>();
-      channels.add(strip.submat(0,H, 0,W));
-      channels.add(strip.submat(H,2*H, 0,W));
-      channels.add(strip.submat(2*H,3*H, 0,W));
-
-      // Merge planes into final rgb image
-      Mat rgb = new Mat();
-      Core.merge(channels, rgb);
-
-      // Add the mean value
-      Core.add(rgb,new Scalar(104.00699, 116.66877, 122.67892),rgb);
-
-      // Convert mat to bitmap
-      Imgproc.cvtColor(rgb,rgb,COLOR_RGB2BGR);
-      rgb.convertTo(rgb,CV_8UC3);
-      Utils.matToBitmap(rgb,harbmp);
-
-    // Save bitmap output
-      save(resbmp,"Seg_normalized");
-      save(harbmp,"Seg_harmonized");
-
-  }
-
-    public void save (Bitmap bmp, String name){
-
-
-        String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
-        OutputStream outStream = null;
-        File file = new File(extStorageDirectory, name+k+".png");
-        k++;
-        try {
-            outStream = new FileOutputStream(file);
-            bmp.compress(Bitmap.CompressFormat.PNG, 100, outStream);
-            outStream.flush();
-            outStream.close();
-        } catch(Exception e) {
-
-        }
+//      long startTimeb = SystemClock.uptimeMillis();
+//      Mat result=BgsegmentTest.net.forward();
+//      long endTimeb = SystemClock.uptimeMillis();
+//
+//      Log.d("color harmonize", Long.toString(endTimeb - startTimeb));
+//
+//      // Extract rgb image from output blob
+//      int H = result.size(2);
+//      int W = result.size(3);
+////
+////      // Reshape it to a long vertical strip:
+//      Mat strip = result.reshape(1, H * 3);
+//
+//      // Collect the color planes into a channels list:
+//      List<Mat> channels = new ArrayList<>();
+//      channels.add(strip.submat(0,H, 0,W));
+//      channels.add(strip.submat(H,2*H, 0,W));
+//      channels.add(strip.submat(2*H,3*H, 0,W));
+//
+//      // Merge planes into final rgb image
+//      Mat rgb = new Mat();
+//      Core.merge(channels, rgb);
+//
+//      // Add the mean value
+//      Core.add(rgb,new Scalar(104.00699, 116.66877, 122.67892),rgb);
+//
+//      // Convert mat to bitmap
+//      Imgproc.cvtColor(rgb,rgb,COLOR_RGB2BGR);
+//      rgb.convertTo(rgb,CV_8UC3);
+//      Utils.matToBitmap(rgb,harbmp);
+//
+//    // Save bitmap output
+//      save(resbmp,"Seg_normalized");
+//      save(harbmp,"Seg_harmonized");
+//
+//  }
+//
+//    public void save (Bitmap bmp, String name){
+//
+//
+//        String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
+//        OutputStream outStream = null;
+//        File file = new File(extStorageDirectory, name+k+".png");
+//        k++;
+//        try {
+//            outStream = new FileOutputStream(file);
+//            bmp.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+//            outStream.flush();
+//            outStream.close();
+//        } catch(Exception e) {
+//
+//        }
 
     }
 

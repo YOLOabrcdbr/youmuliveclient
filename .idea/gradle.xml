@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/WSLiveDemo-master/WSLiveDemo-master/libWSLive" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/app/rtmppublisher" />
+            <option value="$PROJECT_DIR$/particlesystempublisher" />
             <option value="$PROJECT_DIR$/zxing-simplify" />
             <option value="$PROJECT_DIR$/zxinglib" />
           </set>

@@ -30,6 +30,8 @@ import android.widget.Toast;
 
 import com.takusemba.rtmppublisher.Publisher;
 import com.takusemba.rtmppublisher.PublisherListener;
+import com.teachk.particlesystempublisher.ParticleSystem;
+import com.teachk.particlesystempublisher.RepositoryUtil;
 
 //import com.teachk.publisherYoumu.tflitecamerademo4.ImageSegmentorFloatMobileUnet;
 
@@ -55,6 +57,7 @@ import me.lake.librestreaming.ws.AspectTextureView;
 import me.lake.librestreaming.ws.StreamAVOption;
 import me.lake.librestreaming.ws.StreamLiveCameraView;
 
+import static me.lake.librestreaming.client.RESVideoClient.tCopy;
 public class MainLandScapeActivity extends AppCompatActivity implements PublisherListener {
 
     Publisher publisher;
@@ -167,6 +170,9 @@ public class MainLandScapeActivity extends AppCompatActivity implements Publishe
     /** An additional thread for running tasks that shouldn't block the UI. */
     private HandlerThread backgroundThread;
     private boolean istrans = false;
+    static int t = 0;//计数器，60一个循环
+    public static int[][] config = new int[10][23];
+    public static int config_time;
 
 
 
@@ -245,6 +251,7 @@ public class MainLandScapeActivity extends AppCompatActivity implements Publishe
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_main_land_scape);
         IsShow=false;
+        cacheEffect("fire");
         if (!OpenCVLoader.initDebug())
             Log.e("OpenCv", "Unable to load OpenCV");
         else
@@ -624,6 +631,52 @@ public class MainLandScapeActivity extends AppCompatActivity implements Publishe
     @Override
     public void onFailedToConnect(){
         Log.d("SetPSWActivity", "onFailedToConnect: 1");
+    }
+
+
+    private void cacheEffect(String effectName){
+        if(effectName.startsWith("C")){
+            //Toast.makeText(CameraViewActivity.this, "敬请期待！", Toast.LENGTH_SHORT).show();
+        } else {
+            String effectFullName = effectName + ".txt";
+            if(RepositoryUtil.fileIsExists(Environment.getExternalStorageDirectory().getAbsolutePath()+"/download/" + effectFullName)){
+                loadEffect(RepositoryUtil.ReadTxtFile(Environment.getExternalStorageDirectory().getAbsolutePath()+"/download/" + effectFullName));
+                Log.d("mat","load finish");
+            } else {
+                DownloadManager.Request request = new DownloadManager.Request(Uri.parse("http://qacn29ngr.bkt.clouddn.com/template/" + effectFullName));
+                request.setDestinationInExternalPublicDir("/download/", effectFullName);
+                DownloadManager downloadManager= (DownloadManager)getSystemService(MainActivity.DOWNLOAD_SERVICE);
+                downloadManager.enqueue(request);
+                Log.d("mat","downloading.."+Environment.getExternalStorageDirectory()+"/download/" + effectFullName);
+                //Toast.makeText(CameraViewActivity.this, "开始下载:" + effectName + ",请再次点击启动模板", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    private void loadEffect(String content){
+
+        //Delete former effect template data
+        t = 0;
+
+        tCopy=t;
+        config_time = 0;
+        for(int i = 0; i <10; i++){
+            config[i][22] = 0;
+        }
+
+        //Set effect template data
+        config_time = Integer.parseInt(content.substring(0,1));
+        content = content.substring(2);
+        String[] column = content.split("\n");
+        for(int i = 0;i < column.length;i++){
+            String[] line = column[i].split(",");
+            for(int z = 0;z < line.length-1;z++){
+                config[i][z]= Integer.valueOf(line[z+1]);
+            }
+            config[i][22] = 1;
+        }
+
+        //Configure particle system
+        ParticleSystem.Configuration(config,config_time);
     }
 
 }

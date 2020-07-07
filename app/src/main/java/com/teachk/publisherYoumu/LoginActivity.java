@@ -26,7 +26,7 @@ import android.widget.Toast;
 //import com.github.shenyuanqing.zxingsimplify.zxing.Activity.CaptureActivity;
 import com.google.gson.Gson;
 import com.google.zxing.activity.CaptureActivity;
-import com.teachk.publisherYoumu.bgsegment.BgActivity;
+//import com.teachk.publisherYoumu.bgsegment.BgActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -82,15 +82,6 @@ public class LoginActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, WaitingPermit.toArray(WaitingPermits), 1);
         }
 
-        testBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(LoginActivity.this, BgActivity.class);
-
-                startActivity(intent);
-                finish();
-            }
-        });
 
         LoginButton.setOnClickListener(new View.OnClickListener() {
             @Override

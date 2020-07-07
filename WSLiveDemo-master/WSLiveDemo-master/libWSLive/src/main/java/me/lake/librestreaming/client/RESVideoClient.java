@@ -14,6 +14,8 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.SurfaceView;
 
+import com.teachk.particlesystempublisher.ParticleSystem;
+
 import org.opencv.android.Utils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -60,10 +62,12 @@ public class RESVideoClient {
     private WeakReference<Activity> mActivity;
 
 
+
     private ImageSegmentor segmentor;
     Bitmap bgd = null;
-
     private boolean istrans = false;
+
+    public static int tCopy;
 
     public RESVideoClient(RESCoreParameters parameters,WeakReference<Activity> activity) {
         resCoreParameters = parameters;
@@ -576,19 +580,7 @@ public class RESVideoClient {
                                 byte[] jdata = baos.toByteArray();
                                 Bitmap bitmap = BitmapFactory.decodeByteArray(jdata, 0, jdata.length);
 
-//                            Mat raw = new Mat((int)(resCoreParameters.videoHeight*1.5),resCoreParameters.videoWidth,CvType.CV_8UC1);
-//                            raw.put(0,0,data);
-//                            Mat trans = new Mat();
-//                            Imgproc.cvtColor(raw,trans,Imgproc.COLOR_YUV2BGR_I420);
-//
-//
-//                            Bitmap  bitmap  = Bitmap.createBitmap(trans.cols(), trans.rows(),Bitmap.Config.ARGB_8888);
-//
-//                            Utils.matToBitmap(trans,bitmap);
-//                            if(c<15) {
-//                                saveBitmap(bitmap,Environment.getExternalStorageDirectory().getAbsolutePath()+"/Pictures/bitmap"+k+".jpg");
-//                                c++;
-//                            }
+
                                 int width = bitmap.getWidth();
                                 int height = bitmap.getHeight();
                                 float scaleWidth = ((float) 128) / width;
@@ -621,12 +613,25 @@ public class RESVideoClient {
 //                            data = data_result;
 
                                 byte[] data_result = ImageUtils.bitmapToNv21(segmentor.result, pwidth, phight);
+                                data = data_result;
 //                           data_result = ImageUtils.rotateYUV420Degree180(ImageUtils.rotateYUV420Degree90(data_result,pwidth, phight),pwidth, phight);
 //                            if(k<15) {
 //                                saveBitmap(segmentor.result,Environment.getExternalStorageDirectory().getAbsolutePath()+"/Pictures/ddd"+k+".jpg");
 //                                k++;
 //                            }
-                                data = data_result;
+                              ;
+                            Mat mat = new Mat((int)(resCoreParameters.videoHeight*1.5),resCoreParameters.videoWidth,CvType.CV_8UC1);
+                            mat.put(0,0,data);
+                            Mat rgb_i420 = new Mat();
+                            Imgproc.cvtColor(mat , rgb_i420, Imgproc.COLOR_YUV2RGB_I420);
+                            ParticleSystem.runSystem(rgb_i420, null, tCopy);
+                            Mat result = new Mat();
+                            Imgproc.cvtColor(rgb_i420, result , Imgproc.COLOR_RGB2YUV_I420);//转换回YUV420p格式
+                            byte[] data_result2 = new byte[(int)(resCoreParameters.videoHeight*resCoreParameters.videoWidth*1.5)];
+                            result.get(0,0,data_result);
+
+                            data=data_result2;
+
 
                             }
 
